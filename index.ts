@@ -1,8 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { getComments } from "./src/datasource";
-import https from "https";
-import fs from "fs";
 
 dotenv.config();
 
@@ -20,10 +18,6 @@ app.get("/comments", async (req: Request, res: Response) => {
   res.json(comments);
 });
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-});
-
 if (externalUrl) {
   const hostname = "127.0.0.1";
   app.listen(port, hostname, () => {
@@ -32,15 +26,7 @@ if (externalUrl) {
     );
   });
 } else {
-  https
-    .createServer(
-      {
-        key: fs.readFileSync("server.key"),
-        cert: fs.readFileSync("server.cert"),
-      },
-      app
-    )
-    .listen(port, function () {
-      console.log(`Server running at https://localhost:${port}/`);
-    });
+  app.listen(port, function () {
+    console.log(`Server running at http://localhost:${port}/`);
+  });
 }
