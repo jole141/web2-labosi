@@ -4,29 +4,18 @@ import { getComments } from "./src/datasource";
 
 dotenv.config();
 
-const app: Express = express();
-const externalUrl = process.env.RENDER_EXTERNAL_URL;
-const port =
-  externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 4080;
+const server: Express = express();
 
-app.get("/", (req: Request, res: Response) => {
+server.get("/", (req: Request, res: Response) => {
   res.send("TEST");
 });
 
-app.get("/comments", async (req: Request, res: Response) => {
+server.get("/comments", async (req: Request, res: Response) => {
   const comments = await getComments();
   res.json(comments);
 });
 
-if (externalUrl) {
-  const hostname = "127.0.0.1";
-  app.listen(port, hostname, () => {
-    console.log(
-      `Server locally running at http://${hostname}:${port}/ and from outside on ${externalUrl}`
-    );
-  });
-} else {
-  app.listen(port, function () {
-    console.log(`Server running at http://localhost:${port}/`);
-  });
-}
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log("Server listening on http://localhost:" + PORT);
+});
