@@ -10,7 +10,7 @@ export const checkCommentPermissions = async (
   const user = await getJWTInfo(req);
   const { id } = req.params;
   const comment = await getCommentById(parseInt(id, 10));
-  if (comment.user !== user.name) {
+  if (comment.email !== user.name) {
     res.status(403).json({ message: "Forbidden" });
   }
   next();

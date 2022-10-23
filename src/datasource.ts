@@ -49,11 +49,15 @@ export async function getMatchResultById(id: number) {
 }
 
 // POST
-export async function postComment(comment: string, user: string) {
-  await pool.query("INSERT INTO comments (comment, user) VALUES ($1, $2)", [
-    comment,
-    user,
-  ]);
+export async function postComment(
+  comment: string,
+  matchId: number,
+  email: string
+) {
+  await pool.query(
+    "INSERT INTO comments (comment, match_id, email) VALUES ($1, $2, $3)",
+    [comment, matchId, email]
+  );
 }
 
 export async function postMatch(
@@ -123,5 +127,5 @@ export async function putMatchFinished(id: number) {
 
 // DELETE
 export async function deleteComment(id: number) {
-  await pool.query("DELETE FROM comments WHERE id = $1", [id]);
+  await pool.query("DELETE FROM comments WHERE comment_id = $1", [id]);
 }

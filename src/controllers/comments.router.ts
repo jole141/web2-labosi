@@ -21,17 +21,23 @@ commentController.get("/comments/:matchId", async (req, res) => {
 
 commentController.post("/comments", checkJwt, async (req, res) => {
   const user = await getJWTInfo(req);
-  const comment = await postComment(req.body.comment, user.name);
+  const comment = await postComment(
+    req.body.comment,
+    req.body.matchId,
+    user.name
+  );
   res.status(200).json(comment);
 });
 
 commentController.put(
-  "/comments/:id",
+  "/comments/edit/:id",
   checkJwt,
   checkCommentPermissions,
   async (req, res) => {
-    const { id } = req.params;
-    const comment = await putComment(req.body.comment, id);
+    const comment = await putComment(
+      parseInt(req.params.id, 10),
+      req.body.comment
+    );
     res.status(200).json(comment);
   }
 );
